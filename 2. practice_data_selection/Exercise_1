@@ -1,0 +1,3 @@
+SELECT * FROM accidents;
+
+SELECT * FROM accidents LIMIT 10;

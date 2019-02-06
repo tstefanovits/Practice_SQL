@@ -1,0 +1,1 @@
+SELECT city, accident_date, damage FROM accidents;

@@ -1,0 +1,19 @@
+SELECT city,
+       country,
+       accident_date,
+       damage,
+       factory_id
+FROM accidents
+WHERE damage BETWEEN 100 AND 1000
+AND factory_id LIKE '%LRJ%';
+
+--Original solution
+SELECT city,
+       country,
+       accident_date,
+       damage,
+       factory_id
+FROM accidents
+WHERE damage > 100
+AND   damage < 1000
+AND   factory_id LIKE '%LRJ%';

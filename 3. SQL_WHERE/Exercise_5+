@@ -3,14 +3,8 @@ SELECT city,
        accident_date,
        damage
 FROM accidents
-WHERE damage NOT BETWEEN 100 AND 1000;
+WHERE damage NOT BETWEEN 100 AND 1000
+AND WHERE country LIKE 'Germany';
 
---Originial solution
-SELECT city,
-       country,
-       accident_date,
-       damage
-FROM accidents
-WHERE damage < 100
-OR    damage > 1000;
+
 

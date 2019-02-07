@@ -1,19 +1,7 @@
-SELECT city,
-       country,
-       accident_date,
-       damage,
-       factory_id
+SELECT *
 FROM accidents
-WHERE damage BETWEEN 100 AND 1000
-AND factory_id LIKE '%LRJ%';
+WHERE country = 'Greece'
+AND weather = 'Rainy'
+OR time_of_the_day = 'Night';
 
---Original solution
-SELECT city,
-       country,
-       accident_date,
-       damage,
-       factory_id
-FROM accidents
-WHERE damage > 100
-AND   damage < 1000
-AND   factory_id LIKE '%LRJ%';
+

@@ -1,0 +1,5 @@
+SELECT city, country, accident_date, damage
+FROM accidents
+WHERE damage > 100
+AND damage < 1000;
+

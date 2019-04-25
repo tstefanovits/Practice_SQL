@@ -1,88 +1,133 @@
-CREATE TABLE test_results
+/* Creating test_results table. */ 
+CREATE TABLE test_results 
 (
-  name         TEXT,
-  student_id   INTEGER,
-  birth_date   DATE,
-  test_result  DECIMAL,
-  grade        TEXT,
-  passed       BOOLEAN
+  name          TEXT,
+  student_id    INTEGER,
+  birth_date    DATE,
+  test_result   DECIMAL,
+  grade         TEXT,
+  passed        BOOLEAN
 );
 
+/* Dropping test_results- */ 
 DROP TABLE test_results;
 
-CREATE TABLE test_results
+/* Creating test_results table. */ 
+CREATE TABLE test_results 
 (
-  name         TEXT,
-  student_id   INTEGER   PRIMARY KEY,
-  birth_date   DATE,
-  test_result  DECIMAL   NOT NULL,
-  grade        TEXT      NOT NULL,
-  passed       BOOLEAN   NOT NULL
+  name          TEXT,
+  student_id    INTEGER PRIMARY KEY,
+  birth_date    DATE,
+  test_result   DECIMAL NOT NULL,
+  grade         TEXT NOT NULL,
+  passed        BOOLEAN NOT NULL
 );
 
+/* Inssert data to test_result table. */ 
 INSERT INTO test_results
 VALUES
-('Walt', 1, '1980-12-01', 95.50, 'A', TRUE);
+(
+  'Walt',
+  1,
+  '1980-12-01',
+  95.50,
+  'A',
+  TRUE
+);
 
-SELECT * FROM test_results;
+/* Test. */ 
+SELECT *
+FROM test_results;
 
+/* Inssert data to test_result table. */ 
 INSERT INTO test_results
 VALUES
-('Jesse', 2, '1988-02-11', 74.00, 'C', TRUE),
-('Todd', 3, '1987-06-13', 60.00, 'D', TRUE),
-('Tuco', 4, '1970-11-11', 15.50, 'F', FALSE),
-('Gus', 5, '1975-08-08', 80.00, 'B', TRUE)
-;
+(
+  'Jesse',
+  2,
+  '1988-02-11',
+  74.00,
+  'C',
+  TRUE
+),
+(
+  'Todd',
+  3,
+  '1987-06-13',
+  60.00,
+  'D',
+  TRUE
+),
+(
+  'Tuco',
+  4,
+  '1970-11-11',
+  15.50,
+  'F',
+  FALSE
+),
+(
+  'Gus',
+  5,
+  '1975-08-08',
+  80.00,
+  'B',
+  TRUE
+);
 
-SELECT * FROM test_results;
+/* Test. */ 
+SELECT *
+FROM test_results;
 
-COMMIT;
-
+/* Drop data from test_result table. */ 
 TRUNCATE TABLE test_results;
 
-SELECT * FROM test_results;
+/* Test. */ 
+SELECT *
+FROM test_results;
 
-SELECT * FROM test_results;
-
-CREATE TABLE student_names
+/* Creating student_names table. */ 
+CREATE TABLE student_names 
 (
-name TEXT
+  name   TEXT
 );
 
-INSERT INTO student_names
-(SELECT name FROM test_results);
+/* Test. */ 
+SELECT *
+FROM student_names;
 
-SELECT * FROM student_names;
-
-CREATE TABLE test_averages
+/* Creating test_averages table. */ 
+CREATE TABLE test_averages 
 (
-test_average DECIMAL
+  test_average   DECIMAL
 );
 
-INSERT INTO test_averages
-(SELECT AVG(test_result) FROM test_results);
+/* Test. */ 
+SELECT *
+FROM test_averages;
 
-SELECT * FROM test_averages;
+/* Creating accidents table. */ 
+CREATE TABLE accidents 
+(
+  car_type          TEXT,
+  city              TEXT,
+  factory_id        TEXT,
+  accident_date     DATE,
+  accident_id       INT,
+  car_brand         TEXT,
+  country           TEXT,
+  reported          BOOL,
+  weather           TEXT,
+  time_of_the_day   TEXT,
+  damage            INT
+);
 
-CREATE TABLE accidents
-  (car_type TEXT,
-   city TEXT,
-   factory_id TEXT,
-   accident_date DATE,
-   accident_id INT,
-   car_brand TEXT,
-   country TEXT,
-   reported BOOL,
-   weather TEXT,
-   time_of_the_day TEXT,
-   damage INT);
-   
-COPY accidents FROM '/home/tamas/accidents.csv' WITH CSV HEADER DELIMITER',';
+/* Inssert data to accidents table. */ 
+COPY accidents
+FROM '/home/tamas/accidents.csv' WITH CSV HEADER DELIMITER ',';
 
-COMMIT;
-
+/* Test. */ 
 SELECT *
 FROM accidents
 LIMIT 10;
 
-COMMIT;

@@ -1,3 +1,0 @@
-SELECT * FROM accidents WHERE damage > 0;
-
-SELECT city, damage, accident_date FROM accidents WHERE damage > 0;

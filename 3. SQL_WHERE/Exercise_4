@@ -1,4 +1,0 @@
-SELECT car_type, country
-FROM accidents
-WHERE city 
-LIKE '%ALA%';

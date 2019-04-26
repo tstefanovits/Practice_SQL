@@ -1,7 +1,0 @@
-SELECT *
-FROM accidents
-WHERE country = 'Greece'
-AND weather = 'Rainy'
-OR time_of_the_day = 'Night';
-
-

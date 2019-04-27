@@ -8,3 +8,13 @@ GROUP BY country
 ORDER BY country,
          AVG(damage);
 
+/* Alternative solution. */
+SELECT country,
+       weather,
+       AVG(damage)
+FROM accidents
+WHERE weather = 'Rainy'
+OR    weather = 'Windy'
+GROUP BY country, weather
+ORDER BY country,
+         AVG(damage);

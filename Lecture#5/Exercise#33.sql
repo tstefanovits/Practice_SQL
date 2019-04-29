@@ -28,5 +28,18 @@ FROM (SELECT country,
       GROUP BY country
       ORDER BY country DESC) AS covered;
 
+/* Distribution of the accidents what are covered or not in each country. */ 
+SELECT *
+FROM (SELECT country,
+             paid,
+             COUNT(*)
+      FROM accidents
+      JOIN covered_by_insurance ON accidents.accident_id = covered_by_insurance.accident_id
+      WHERE paid = 'true'
+      OR paid = 'false'
+      GROUP BY country, paid
+      ORDER BY country DESC) AS covered;
+      
+
 /* Which 3 cities have the highest proportion of reported accidents? */
 

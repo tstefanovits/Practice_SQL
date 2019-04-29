@@ -1,0 +1,25 @@
+/* How many cities had less than 40 incidents? */ 
+SELECT city,
+       COUNT(city)
+FROM accidents
+GROUP BY accidents.city
+HAVING COUNT(city) < 40
+ORDER BY COUNT(city) DESC;
+
+/* How many cities had less than 40 incidents? (Solve it by using a subquery.) */
+SELECT *,
+       COUNT(city)
+FROM (SELECT city 
+      FROM accidents) AS cities
+GROUP BY cities.city
+HAVING COUNT(city) < 40
+ORDER BY COUNT(city) DESC;
+
+/* Alternative solution. */
+SELECT COUNT(*) AS count_lines
+FROM (SELECT city,
+             COUNT(*) AS count_accidents
+      FROM accidents
+      GROUP BY city) AS accidents_by_city
+WHERE accidents_by_city.count_accidents < 40;
+

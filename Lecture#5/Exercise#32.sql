@@ -39,7 +39,21 @@ FROM (SELECT SUM(damage)
       FROM accidents
       GROUP BY country
       ORDER BY SUM(damage) DESC) AS total;
-
+      
+/* Total damage 1% from each country. */
+SELECT SUM(total) / 100 AS percent1
+FROM (SELECT SUM(damage) 
+      FROM accidents
+      GROUP BY country
+      ORDER BY SUM(damage) DESC) AS total;
+     
+/* Total damage of all country. */
+SELECT SUM(total)
+FROM (SELECT SUM(damage) AS total
+      FROM accidents
+      GROUP BY country
+      ORDER BY SUM(damage) DESC) AS total;
+      
 /* Then take all these total-by-country damage values and calculate the ratio of the highest total damage cost (one country) to the total damage cost for all countries. 
 Express this ratio as a percentage! (You should compose this in one query, and get one number as the result!) */
 

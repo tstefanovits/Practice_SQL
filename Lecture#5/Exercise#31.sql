@@ -32,3 +32,11 @@ FROM (SELECT city,
       GROUP BY city) AS accidents_by_city
 WHERE accidents_by_city.count_accidents < 40;
 
+/* Alternative solution 3. */
+SELECT COUNT(*)
+FROM (SELECT city,
+             COUNT(*) AS count_accidents
+      FROM accidents
+      GROUP BY city
+      HAVING COUNT(*) < 40) AS accidents_by_city;
+

@@ -92,10 +92,3 @@ FROM (SELECT country,
       FROM accidents
       GROUP BY country
       ORDER BY SUM(damage) DESC) AS total;
-      
-/* Alternative solution. */
-SELECT MAX(damage_by_country.sum_damage) / SUM(damage_by_country.sum_damage)*100 AS percentage
-FROM (SELECT country,
-             SUM(damage) AS sum_damage
-      FROM accidents
-      GROUP BY country) AS damage_by_country;

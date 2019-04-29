@@ -68,11 +68,35 @@ WHERE reported = 'false'
 GROUP BY city
 ORDER BY COUNT(*) DESC;
 
-/* Which 3 cities have the highest proportion of reported accidents? */ 
+/* Make subqueries. */
+(SELECT city,
+       COUNT(*) AS count_accidents
+FROM accidents
+WHERE reported = 'true'
+GROUP BY city) AS reported;
 
-/* Alternative solution. */ 
+(SELECT city,
+       COUNT(*) AS count_accidents
+FROM accidents
+WHERE reported = 'false'
+GROUP BY city) AS reported;
+
+/* Join them together. */
+SELECT *
+FROM (SELECT city,
+             COUNT(*) AS count_accidents
+      FROM accidents
+      WHERE reported = 'true'
+      GROUP BY city) AS reported
+  JOIN (SELECT city,
+               COUNT(*) AS count_accidents
+        FROM accidents
+        WHERE reported = 'false'
+        GROUP BY city) AS not_reported ON reported.city = not_reported.city;
+
+/* Which 3 cities have the highest proportion of reported accidents? */ 
 SELECT reported.city,
-       reported.count_accidents::FLOAT/(reported.count_accidents + not_reported.count_accidents)::FLOAT AS ratio
+       reported.count_accidents::float / (reported.count_accidents + not_reported.count_accidents)::float AS ratio
 FROM (SELECT city,
              COUNT(*) AS count_accidents
       FROM accidents
@@ -83,5 +107,6 @@ FROM (SELECT city,
         FROM accidents
         WHERE reported = 'false'
         GROUP BY city) AS not_reported ON reported.city = not_reported.city
-ORDER BY ratio DESC LIMIT 3;
+ORDER BY ratio DESC 
+LIMIT 3;
 

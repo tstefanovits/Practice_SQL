@@ -16,6 +16,15 @@ HAVING COUNT(city) < 40
 ORDER BY COUNT(city) DESC;
 
 /* Alternative solution. */
+SELECT COUNT(*) AS number_of_cities
+FROM (SELECT city, 
+             COUNT(*) AS number_of_accidents 
+      FROM accidents
+GROUP BY city 
+HAVING COUNT(*) < 40 ) AS cities
+ORDER BY COUNT(*) DESC;
+
+/* Alternative solution 2. */
 SELECT COUNT(*) AS count_lines
 FROM (SELECT city,
              COUNT(*) AS count_accidents

@@ -33,3 +33,11 @@ COPY abtest_companies
 FROM '/home/jovyan/work/Vault#3/abtest_companies.csv' WITH CSV HEADER DELIMITER ',';
 
 COMMIT;
+
+/* Task 1: How many Android and how many iPhone users do we have? */ 
+SELECT phone_type,
+       COUNT(phone_type) AS phones_number
+FROM abtest_companies
+GROUP BY phone_type;
+
+COMMIT;

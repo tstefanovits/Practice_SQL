@@ -41,3 +41,13 @@ FROM abtest_companies
 GROUP BY phone_type;
 
 COMMIT;
+
+/* Task 2: List every company that has more than 20 employees! */ 
+SELECT company_id,
+       COUNT(*) AS employees_number
+FROM abtest_companies
+GROUP BY company_id
+HAVING COUNT(*) > 20
+ORDER BY employees_number DESC;
+
+COMMIT;

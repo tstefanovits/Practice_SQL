@@ -115,3 +115,9 @@ FROM abtest_users
   JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
 GROUP BY segment;
 
+/* Alternative solutions for Task 4. */ 
+SELECT segment,
+       COUNT(*)
+FROM abtest_users
+  JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+GROUP BY segment;

@@ -68,3 +68,13 @@ HAVING COUNT(company_id) >= 20
 ORDER BY employees_number DESC;
 
 COMMIT;
+
+/* Task 3: Take all the companies that have more than 20 employees? How many employees do they have in total? */ 
+SELECT SUM(employees_number) AS total_employees
+FROM (SELECT company_id,
+             COUNT(*) AS employees_number
+      FROM abtest_companies
+      GROUP BY company_id
+      HAVING COUNT(*) >= 20) AS employees_filtering;
+      
+COMMIT;

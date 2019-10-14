@@ -76,5 +76,34 @@ FROM (SELECT company_id,
       FROM abtest_companies
       GROUP BY company_id
       HAVING COUNT(*) >= 20) AS employees_filtering;
-      
+
+COMMIT;
+
+/* Alternative solutions for Task 3. */ 
+SELECT SUM(employees_number) AS total_employees
+FROM (SELECT company_id,
+             COUNT(company_id) AS employees_number
+      FROM abtest_companies
+      GROUP BY company_id
+      HAVING COUNT(*) >= 20) AS employees_filtering;
+
+SELECT SUM(employees_number) AS total_employees
+FROM (SELECT abtest_companies.company_id,
+             CAST(COUNT(company_id) AS INT) AS employees_number
+      FROM abtest_companies
+      GROUP BY company_id
+      HAVING COUNT(company_id) >= 20) AS employees_number;
+
+CREATE VIEW total_employees 
+AS
+SELECT SUM(employees_number) AS total_employees
+FROM (SELECT company_id,
+             COUNT(*) AS employees_number
+      FROM abtest_companies
+      GROUP BY company_id
+      HAVING COUNT(*) >= 20) AS employees_filtering;
+
+SELECT SUM(total_employees)
+FROM total_employees;
+
 COMMIT;

@@ -107,3 +107,11 @@ SELECT SUM(total_employees)
 FROM total_employees;
 
 COMMIT;
+
+/* Task 4: How many blue and how many red pens were sold during the A/B test? */ 
+SELECT segment,
+       COUNT(segment)
+FROM abtest_users
+  JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+GROUP BY segment;
+

@@ -115,9 +115,32 @@ FROM abtest_users
   JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
 GROUP BY segment;
 
+COMMIT;
+
 /* Alternative solutions for Task 4. */ 
 SELECT segment,
        COUNT(*)
 FROM abtest_users
   JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
 GROUP BY segment;
+
+COMMIT;
+
+/* Task 5: Which pen won the A/B test: the red or the blue? */ 
+SELECT segment,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+WHERE segment LIKE 'red'
+GROUP BY segment;
+
+SELECT segment,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+WHERE segment LIKE 'blue'
+GROUP BY segment;
+
+COMMIT;

@@ -144,3 +144,11 @@ WHERE segment LIKE 'blue'
 GROUP BY segment;
 
 COMMIT;
+
+/* Alternative solutions for Task 5. */ 
+SELECT segment,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+GROUP BY segment;

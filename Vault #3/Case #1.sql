@@ -168,3 +168,38 @@ GROUP BY abtest_users.segment,
 ORDER BY abtest_companies.phone_type;
 
 COMMIT;
+
+/* Alternative solutions for Task 6. */ 
+SELECT phone_type,
+       segment,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+  JOIN abtest_companies ON abtest_users.user_id = abtest_companies.user_id
+GROUP BY segment,
+         phone_type
+ORDER BY abtest_companies.phone_type;
+
+SELECT abtest_companies.phone_type,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_companies
+  FULL JOIN abtest_purchases ON abtest_companies.user_id = abtest_purchases.user_id
+  FULL JOIN abtest_users ON abtest_companies.user_id = abtest_users.user_id
+WHERE abtest_companies.phone_type LIKE 'android'
+GROUP BY abtest_users.segment,
+         abtest_companies.phone_type
+ORDER BY abtest_companies.phone_type;
+
+SELECT abtest_companies.phone_type,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_companies
+  FULL JOIN abtest_purchases ON abtest_companies.user_id = abtest_purchases.user_id
+  FULL JOIN abtest_users ON abtest_companies.user_id = abtest_users.user_id
+WHERE abtest_companies.phone_type LIKE 'iphone'
+GROUP BY abtest_users.segment,
+         abtest_companies.phone_type
+ORDER BY abtest_companies.phone_type;
+
+COMMIT;

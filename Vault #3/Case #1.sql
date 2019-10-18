@@ -152,3 +152,19 @@ SELECT segment,
 FROM abtest_users
   FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
 GROUP BY segment;
+
+COMMIT;
+
+/* Task 6: Is there any significant difference in the A/B test results between iPhone and Android users? */ 
+SELECT abtest_companies.phone_type,
+       abtest_users.segment,
+       COUNT(*) AS total_purchases,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_companies
+  FULL JOIN abtest_purchases ON abtest_companies.user_id = abtest_purchases.user_id
+  FULL JOIN abtest_users ON abtest_companies.user_id = abtest_users.user_id
+GROUP BY abtest_users.segment,
+         abtest_companies.phone_type
+ORDER BY abtest_companies.phone_type;
+
+COMMIT;

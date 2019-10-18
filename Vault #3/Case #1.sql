@@ -181,6 +181,7 @@ GROUP BY segment,
 ORDER BY abtest_companies.phone_type;
 
 SELECT abtest_companies.phone_type,
+       abtest_users.segment,
        COUNT(*) AS total_purchases,
        COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
 FROM abtest_companies
@@ -192,6 +193,7 @@ GROUP BY abtest_users.segment,
 ORDER BY abtest_companies.phone_type;
 
 SELECT abtest_companies.phone_type,
+       abtest_users.segment,
        COUNT(*) AS total_purchases,
        COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
 FROM abtest_companies

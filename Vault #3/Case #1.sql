@@ -205,3 +205,19 @@ GROUP BY abtest_users.segment,
 ORDER BY abtest_companies.phone_type;
 
 COMMIT;
+
+/* Task 7: Take only those companies who have less than 10 employees and re-calculate the A/B test results only for those users! */ 
+SELECT abtest_users.segment,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+  FULL JOIN abtest_companies ON abtest_users.user_id = abtest_companies.user_id
+  WHERE company_id IN (SELECT company_id
+                     FROM abtest_companies
+                     GROUP BY company_id
+                     HAVING COUNT(*) < 10)
+GROUP BY segment
+ORDER BY abtest_users.segment;
+
+COMMIT;
+

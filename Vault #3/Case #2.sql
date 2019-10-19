@@ -60,8 +60,42 @@ ORDER BY model,
 
 COMMIT;
 
-/* Alternative solution for Task 1. */
-SELECT model, hour
+/* Alternative solution for Task 1. */ 
+SELECT model,
+       hour
 FROM solar_losses
-GROUP BY model, hour
+GROUP BY model,
+         hour
 ORDER BY hour;
+
+/* Task 2: Which model is the most problematic one?  
+Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */ 
+
+/* Which one caused the most issues? */ 
+SELECT model,
+       error_code,
+       COUNT(error_code) AS error_code_number
+FROM solar_losses
+GROUP BY model,
+         error_code
+ORDER BY error_code_number DESC;
+
+/* Which one caused the highest total loss damage values (in $)? */ 
+SELECT model,
+       error_code,
+       SUM(loss) AS total_loss
+FROM solar_losses
+GROUP BY model,
+         error_code
+ORDER BY total_loss DESC;
+
+/* Which one caused the highest average loss damage values (in $) per issue? */
+SELECT model,
+       error_code,
+       SUM(loss) / COUNT(error_code) AS per_issue
+FROM solar_losses
+GROUP BY model,
+         error_code
+ORDER BY per_issue DESC;
+
+COMMIT;

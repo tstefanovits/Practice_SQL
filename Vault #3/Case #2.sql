@@ -59,3 +59,9 @@ ORDER BY model,
          hour;
 
 COMMIT;
+
+/* Alternative solution for Task 1. */
+SELECT model, hour
+FROM solar_losses
+GROUP BY model, hour
+ORDER BY hour;

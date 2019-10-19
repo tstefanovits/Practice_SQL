@@ -212,7 +212,7 @@ SELECT abtest_users.segment,
 FROM abtest_users
   FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
   FULL JOIN abtest_companies ON abtest_users.user_id = abtest_companies.user_id
-  WHERE company_id IN (SELECT company_id
+WHERE company_id IN (SELECT company_id
                      FROM abtest_companies
                      GROUP BY company_id
                      HAVING COUNT(*) < 10)
@@ -221,3 +221,18 @@ ORDER BY abtest_users.segment;
 
 COMMIT;
 
+/* Alternative solutions for Task 7. */ 
+SELECT abtest_users.segment,
+       COUNT(abtest_purchases.user_id) / COUNT(DISTINCT (abtest_users.user_id))::FLOAT AS ppu
+FROM abtest_users
+  FULL JOIN abtest_purchases ON abtest_users.user_id = abtest_purchases.user_id
+  FULL JOIN abtest_companies ON abtest_users.user_id = abtest_companies.user_id
+WHERE abtest_companies.user_id IN (SELECT user_id
+                                   FROM abtest_companies
+                                   GROUP BY abtest_companies.company_id,
+                                            abtest_companies.user_id
+                                   HAVING COUNT(abtest_companies.user_id) < 10)
+GROUP BY segment
+ORDER BY abtest_users.segment;
+
+COMMIT;

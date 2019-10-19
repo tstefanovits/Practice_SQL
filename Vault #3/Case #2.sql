@@ -26,3 +26,36 @@ COPY solar_teams
 FROM '/home/jovyan/work/Vault#3/solar_teams.csv' WITH CSV HEADER DELIMITER ',';
 
 COMMIT;
+
+/* Task 1: During which hours does the factory produce the different models (X1, X2, X3)? */ 
+SELECT hour,
+       COUNT(hour)
+FROM solar_losses
+WHERE model LIKE 'x1'
+GROUP BY hour
+ORDER BY hour;
+
+SELECT hour,
+       COUNT(hour)
+FROM solar_losses
+WHERE model LIKE 'x2'
+GROUP BY hour
+ORDER BY hour;
+
+SELECT hour,
+       COUNT(hour)
+FROM solar_losses
+WHERE model LIKE 'x1'
+GROUP BY hour
+ORDER BY hour;
+
+SELECT model,
+       hour,
+       COUNT(hour)
+FROM solar_losses
+GROUP BY model,
+         hour
+ORDER BY model,
+         hour;
+
+COMMIT;

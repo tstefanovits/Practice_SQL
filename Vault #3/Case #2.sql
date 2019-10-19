@@ -69,9 +69,7 @@ GROUP BY model,
 ORDER BY hour;
 
 /* Task 2: Which model is the most problematic one?  
-Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */ 
-
-/* Which one caused the most issues? */ 
+Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */ /* Which one caused the most issues? */ 
 SELECT model,
        error_code,
        COUNT(error_code) AS error_code_number
@@ -89,7 +87,7 @@ GROUP BY model,
          error_code
 ORDER BY total_loss DESC;
 
-/* Which one caused the highest average loss damage values (in $) per issue? */
+/* Which one caused the highest average loss damage values (in $) per issue? */ 
 SELECT model,
        error_code,
        SUM(loss) / COUNT(error_code) AS per_issue
@@ -97,5 +95,28 @@ FROM solar_losses
 GROUP BY model,
          error_code
 ORDER BY per_issue DESC;
+
+COMMIT;
+
+/* Alternative solutions for Task 2. */ 
+SELECT model,
+       COUNT(error_code) AS error_code_number,
+       SUM(loss) AS total_loss,
+       SUM(loss) / COUNT(error_code) AS per_issue
+FROM solar_losses
+GROUP BY model
+ORDER BY error_code_number DESC,
+         total_loss DESC,
+         per_issue DESC;
+
+SELECT model,
+       COUNT(*) AS error_code_number,
+       SUM(loss) AS total_loss,
+       AVG(loss) AS per_issue
+FROM solar_losses
+GROUP BY model
+ORDER BY error_code_number DESC,
+         total_loss DESC,
+         per_issue DESC;
 
 COMMIT;

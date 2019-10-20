@@ -129,7 +129,29 @@ FROM solar_losses
 WHERE model LIKE 'x3'
 GROUP BY model,
          error_code
-ORDER BY error_code_number DESC 
-LIMIT 1;
+ORDER BY error_code_number DESC LIMIT 1;
+
+COMMIT;
+
+/* Alternative solutions for Task 3. */ 
+SELECT model,
+       error_code,
+       COUNT(*) AS error_code_number,
+       SUM(loss) AS total_loss,
+       SUM(loss) / COUNT(error_code) AS per_issue
+FROM solar_losses
+WHERE model LIKE 'x3'
+GROUP BY model,
+         error_code
+ORDER BY error_code_number DESC LIMIT 1;
+
+SELECT error_code,
+       COUNT(*) AS error_code_number,
+       SUM(loss) AS total_loss,
+       AVG(loss) AS per_issue
+FROM solar_losses
+WHERE model = 'x3'
+GROUP BY error_code
+ORDER BY error_code_number DESC;
 
 COMMIT;

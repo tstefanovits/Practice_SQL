@@ -121,3 +121,15 @@ ORDER BY error_code_number DESC,
 
 COMMIT;
 
+/* Task 3: Which error code is the most problematic one for the X3 model? */ 
+SELECT model,
+       error_code,
+       COUNT(*) AS error_code_number
+FROM solar_losses
+WHERE model LIKE 'x3'
+GROUP BY model,
+         error_code
+ORDER BY error_code_number DESC 
+LIMIT 1;
+
+COMMIT;

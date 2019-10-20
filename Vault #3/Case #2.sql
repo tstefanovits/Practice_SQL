@@ -194,3 +194,19 @@ ORDER BY hour,
          minute;
 
 COMMIT;
+
+/* Alternative solutions for Task 5. */ 
+SELECT hour,
+       minute,
+       COUNT(*)
+FROM solar_losses
+WHERE error_code = 'CAMBERRA10'
+OR    error_code = '478Z2'
+OR    error_code = 'L26T'
+GROUP BY hour,
+         minute
+HAVING COUNT(*) > 45
+ORDER BY hour,
+         minute;
+
+COMMIT;

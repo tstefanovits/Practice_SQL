@@ -238,5 +238,19 @@ ORDER BY hour,
 
 COMMIT;
 
-/* Task 6: Take the error codes from TASK #4's results! How many minutes were there in the day where these error codes occurred more than 45 times? (For all models - not only for X3!) */
+/* Task 6: Take the error codes from TASK #4's results! How many minutes were there in the day where these error codes occurred more than 45 times? (For all models - not only for X3!) */ 
+SELECT COUNT(COUNT) min_on_day
+FROM (SELECT HOUR,
+             MINUTE,
+             COUNT(MINUTE)
+      FROM solar_losses
+      WHERE error_code = '478Z2'
+      OR    error_code = 'L26T'
+      OR    error_code = 'CAMBERRA10'
+      GROUP BY HOUR,
+               MINUTE
+      HAVING COUNT(MINUTE) > 45
+      ORDER BY HOUR,
+               MINUTE) AS minutes_on_day;
 
+COMMIT;

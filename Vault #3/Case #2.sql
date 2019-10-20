@@ -178,3 +178,19 @@ GROUP BY error_code
 HAVING SUM(loss) > 300000;
 
 COMMIT;
+
+/* Task 5: Take the error codes from the previous task's results! List every minute of the day where these error codes occurred more than 45 times. (For all models - not only for X3!) */ 
+SELECT hour,
+       minute,
+       COUNT(minute)
+FROM solar_losses
+WHERE error_code = '478Z2'
+OR    error_code = 'L26T'
+OR    error_code = 'CAMBERRA10'
+GROUP BY hour,
+         minute
+HAVING COUNT(minute) > 45
+ORDER BY hour,
+         minute;
+
+COMMIT;

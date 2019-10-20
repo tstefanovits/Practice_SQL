@@ -69,7 +69,7 @@ GROUP BY model,
 ORDER BY hour;
 
 /* Task 2: Which model is the most problematic one?  
-Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */
+Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */ 
 SELECT model,
        error_code,
        COUNT(error_code) AS error_code_number
@@ -153,5 +153,18 @@ FROM solar_losses
 WHERE model = 'x3'
 GROUP BY error_code
 ORDER BY error_code_number DESC;
+
+COMMIT;
+
+/* Task 4: List only those error codes for the X3 model that caused more than $300000 total loss damage! */ 
+SELECT model,
+       error_code,
+       SUM(loss) AS total_loss
+FROM solar_losses
+WHERE model LIKE 'x3'
+GROUP BY model,
+         error_code
+HAVING SUM(loss) > 300000
+ORDER BY total_loss DESC;
 
 COMMIT;

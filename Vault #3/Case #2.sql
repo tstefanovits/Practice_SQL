@@ -209,4 +209,34 @@ HAVING COUNT(*) > 45
 ORDER BY hour,
          minute;
 
+SELECT hour,
+       minute,
+       COUNT(minute)
+FROM solar_losses
+WHERE error_code IN ('CAMBERRA10','478Z2','L26T')
+GROUP BY hour,
+         minute
+HAVING COUNT(minute) > 45
+ORDER BY hour,
+         minute;
+
+SELECT hour,
+       minute,
+       COUNT(minute)
+FROM solar_losses
+WHERE error_code IN (SELECT error_code
+                     FROM solar_losses
+                     WHERE model LIKE 'x3'
+                     GROUP BY model,
+                              error_code
+                     HAVING SUM(loss) > 300000)
+GROUP BY hour,
+         minute
+HAVING COUNT(minute) > 45
+ORDER BY hour,
+         minute;
+
 COMMIT;
+
+/* Task 6: Take the error codes from TASK #4's results! How many minutes were there in the day where these error codes occurred more than 45 times? (For all models - not only for X3!) */
+

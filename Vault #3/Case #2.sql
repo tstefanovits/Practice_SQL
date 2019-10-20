@@ -268,7 +268,7 @@ FROM (SELECT hour,
                minute
       HAVING COUNT(*) > 45) AS subquery;
 
-SELECT COUNT(DISTINCT (hour::integer|| ':' ||minute::integer)::TIME) AS clock
+SELECT COUNT(DISTINCT (hour::integer || ':' || minute::integer)::TIME) AS clock
 FROM (SELECT hour,
              minute,
              COUNT(minute) AS min_on_day
@@ -283,7 +283,7 @@ FROM (SELECT hour,
                minute) AS minutes_on_day;
 
 SELECT COUNT(whattimeisit) AS clock
-FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
+FROM (SELECT DISTINCT (hour::integer || ':' || minute::integer)::TIME AS clock
       FROM (SELECT hour,
                    minute,
                    COUNT(minute)
@@ -302,7 +302,7 @@ FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
       GROUP BY clock) AS whattimeisit;
 
 SELECT COUNT(whattimeisit) AS clock
-FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
+FROM (SELECT DISTINCT (hour::integer || ':' || minute::integer)::TIME AS clock
       FROM (SELECT hour,
                    minute,
                    COUNT(minute) AS min_on_day
@@ -315,6 +315,22 @@ FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
             HAVING COUNT(minute) > 45
             ORDER BY hour,
                      minute) AS minutes_on_day
+      GROUP BY clock) AS whattimeisit;
+
+COMMIT;
+
+SELECT COUNT(whattimeisit) AS clock
+FROM (SELECT DISTINCT (HOUR::integer || ':' || minute::INTEGER)::TIME AS clock
+      FROM (SELECT HOUR,
+                   MINUTE,
+                   COUNT(MINUTE)
+            FROM solar_losses
+            WHERE error_code IN ('CAMBERRA10','478Z2','L26T')
+            GROUP BY HOUR,
+                     MINUTE
+            HAVING COUNT(MINUTE) > 45
+            ORDER BY HOUR,
+                     MINUTE) AS minutes_on_day
       GROUP BY clock) AS whattimeisit;
 
 COMMIT;

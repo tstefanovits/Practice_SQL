@@ -168,3 +168,13 @@ HAVING SUM(loss) > 300000
 ORDER BY total_loss DESC;
 
 COMMIT;
+
+/* Alternative solutions for Task 4. */ 
+SELECT error_code,
+       SUM(loss) AS total_loss
+FROM solar_losses
+WHERE model = 'x3'
+GROUP BY error_code
+HAVING SUM(loss) > 300000;
+
+COMMIT;

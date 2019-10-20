@@ -334,3 +334,19 @@ FROM (SELECT DISTINCT (HOUR::integer || ':' || minute::INTEGER)::TIME AS clock
       GROUP BY clock) AS whattimeisit;
 
 COMMIT;
+
+SELECT COUNT(whattimeisit) AS clock
+FROM (SELECT (HOUR::INTEGER|| ':' ||MINUTE::INTEGER)::TIME AS clock
+      FROM (SELECT HOUR,
+                   MINUTE,
+                   COUNT(MINUTE)
+            FROM solar_losses
+            WHERE error_code IN ('CAMBERRA10','478Z2','L26T')
+            GROUP BY HOUR,
+                     MINUTE
+            HAVING COUNT(MINUTE) > 45
+            ORDER BY HOUR,
+                     MINUTE) AS minutes_on_day
+      GROUP BY clock) AS whattimeisit;
+
+COMMIT;

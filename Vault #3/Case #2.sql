@@ -69,7 +69,7 @@ GROUP BY model,
 ORDER BY hour;
 
 /* Task 2: Which model is the most problematic one?  
-Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */ /* Which one caused the most issues? */ 
+Which one caused the most issues? Which one caused the highest total loss damage values (in $)? Which one caused the highest average loss damage values (in $) per issue? */
 SELECT model,
        error_code,
        COUNT(error_code) AS error_code_number

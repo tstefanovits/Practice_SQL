@@ -1,20 +1,20 @@
 /* Creating solar_losses table. */ 
 CREATE TABLE solar_losses 
 (
-  model        TEXT,
-  DATE DATE,
-  hour         INTEGER,
-  minute       INTEGER,
-  error_code   TEXT,
-  loss         FLOAT
+  model        text,
+  date         date,
+  hour         integer,
+  minute       integer,
+  error_code   text,
+  loss         float
 );
 
 /* Creating solar_teams table. */ 
 CREATE TABLE solar_teams 
 (
-  error_code    TEXT,
-  prio_team     TEXT,
-  backup_team   TEXT
+  error_code    text,
+  prio_team     text,
+  backup_team   text
 );
 
 /* Load data to solar_losses table. */ 
@@ -239,18 +239,82 @@ ORDER BY hour,
 COMMIT;
 
 /* Task 6: Take the error codes from TASK #4's results! How many minutes were there in the day where these error codes occurred more than 45 times? (For all models - not only for X3!) */ 
-SELECT COUNT(COUNT) min_on_day
-FROM (SELECT HOUR,
-             MINUTE,
-             COUNT(MINUTE)
+SELECT COUNT(min_on_day)
+FROM (SELECT hour,
+             minute,
+             COUNT(minute) AS min_on_day
       FROM solar_losses
       WHERE error_code = '478Z2'
       OR    error_code = 'L26T'
       OR    error_code = 'CAMBERRA10'
-      GROUP BY HOUR,
-               MINUTE
-      HAVING COUNT(MINUTE) > 45
-      ORDER BY HOUR,
-               MINUTE) AS minutes_on_day;
+      GROUP BY hour,
+               minute
+      HAVING COUNT(minute) > 45
+      ORDER BY hour,
+               minute) AS minutes_on_day;
+
+COMMIT;
+
+/* Alternative solutions for Task 6. */ 
+SELECT COUNT(*)
+FROM (SELECT hour,
+             minute,
+             COUNT(*)
+      FROM solar_losses
+      WHERE error_code = 'CAMBERRA10'
+      OR    error_code = '478Z2'
+      OR    error_code = 'L26T'
+      GROUP BY hour,
+               minute
+      HAVING COUNT(*) > 45) AS subquery;
+
+SELECT COUNT(DISTINCT (hour::integer|| ':' ||minute::integer)::TIME) AS clock
+FROM (SELECT hour,
+             minute,
+             COUNT(minute) AS min_on_day
+      FROM solar_losses
+      WHERE error_code = '478Z2'
+      OR    error_code = 'L26T'
+      OR    error_code = 'CAMBERRA10'
+      GROUP BY hour,
+               minute
+      HAVING COUNT(minute) > 45
+      ORDER BY hour,
+               minute) AS minutes_on_day;
+
+SELECT COUNT(whattimeisit) AS clock
+FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
+      FROM (SELECT hour,
+                   minute,
+                   COUNT(minute)
+            FROM solar_losses
+            WHERE error_code IN (SELECT error_code
+                                 FROM solar_losses
+                                 WHERE model LIKE 'x3'
+                                 GROUP BY model,
+                                          error_code
+                                 HAVING SUM(loss) > 300000)
+            GROUP BY hour,
+                     minute
+            HAVING COUNT(minute) > 45
+            ORDER BY hour,
+                     minute) AS minutes_on_day
+      GROUP BY clock) AS whattimeisit;
+
+SELECT COUNT(whattimeisit) AS clock
+FROM (SELECT DISTINCT (hour::integer|| ':' ||minute::integer)::TIME AS clock
+      FROM (SELECT hour,
+                   minute,
+                   COUNT(minute) AS min_on_day
+            FROM solar_losses
+            WHERE error_code = '478Z2'
+            OR    error_code = 'L26T'
+            OR    error_code = 'CAMBERRA10'
+            GROUP BY hour,
+                     minute
+            HAVING COUNT(minute) > 45
+            ORDER BY hour,
+                     minute) AS minutes_on_day
+      GROUP BY clock) AS whattimeisit;
 
 COMMIT;

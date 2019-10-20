@@ -120,3 +120,4 @@ ORDER BY error_code_number DESC,
          per_issue DESC;
 
 COMMIT;
+

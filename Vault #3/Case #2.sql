@@ -428,3 +428,31 @@ ORDER BY issues_what_fixed DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Task 8: Additional to their main-team duties, every team works as a backup team, too - where they won back an additional 10% of the damage losses.
+Taking a look at the teams' combined performance as a main and backup team - which team won back the most damage losses (in $) and how much did they win back exactly? */ 
+SELECT prio_team,
+       backup_team,
+       error_code,
+       SUM(issues) AS original_issues,
+       ((SUM(issues)) * 0.3) AS issues_what_fixed_the_main_team,
+       ((SUM(issues)) * 0.1) AS issues_what_fixed_the_backup_team,
+       (SUM(issues) - ((SUM(issues)) * 0.4)) AS difference_in_the_issues,
+       SUM(original_dmg) AS original_dmg,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team,
+       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_fixed_the_backup_team,
+       (SUM(original_dmg) -((SUM(original_dmg)) * 0.4)) AS difference_in_the_dmg
+FROM (SELECT prio_team,
+             backup_team,
+             solar_losses.error_code,
+             SUM(loss) AS original_dmg,
+             COUNT(solar_losses.error_code) AS issues
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team,
+               backup_team,
+               solar_losses.error_code) AS filtering
+GROUP BY error_code,
+         prio_team,
+         backup_team
+ORDER BY difference_in_the_dmg DESC;

@@ -350,3 +350,27 @@ FROM (SELECT (HOUR::INTEGER|| ':' ||MINUTE::INTEGER)::TIME AS clock
       GROUP BY clock) AS whattimeisit;
 
 COMMIT;
+
+/* Task 7: Each main team (aka prio_team) fixed ~30% of the issues and won back exactly 30% of the loss damages that happened during the day.
+Calculating with this 30% value: Which main team (prio_team) won back the most damage losses (in $) and how much did they win back exactly? */
+SELECT prio_team,
+       error_code,
+       SUM(issues) AS original_issues,
+       ((SUM(issues)) * 0.3) AS issues_what_fixed,
+       (SUM(issues) - ((SUM(issues)) * 0.3)) AS difference_in_issues,
+       SUM(original_dmg) AS original_dmg,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_fixed,
+       (SUM(original_dmg) -((SUM(original_dmg)) * 0.3)) AS difference_in_dmg
+FROM (SELECT prio_team,
+             solar_teams.error_code,
+             SUM(loss) AS original_dmg,
+             COUNT(solar_losses.error_code) AS issues
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team,
+               solar_teams.error_code) AS filtering
+GROUP BY error_code,
+         prio_team
+ORDER BY total_dmg_what_fixed DESC;
+
+COMMIT;

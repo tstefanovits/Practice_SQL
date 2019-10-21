@@ -374,3 +374,57 @@ GROUP BY error_code,
 ORDER BY total_dmg_what_fixed DESC;
 
 COMMIT;
+
+/* Alternative solutions for Task 7. */ 
+SELECT prio_team,
+       error_code,
+       SUM(issues) AS original_issues,
+       ((SUM(issues)) * 0.3) AS issues_what_fixed,
+       (SUM(issues) - ((SUM(issues)) * 0.3)) AS difference_in_issues,
+       SUM(original_dmg) AS original_dmg,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_fixed,
+       (SUM(original_dmg) -((SUM(original_dmg)) * 0.3)) AS difference_in_dmg
+FROM (SELECT prio_team,
+             solar_teams.error_code,
+             SUM(loss) AS original_dmg,
+             COUNT(solar_losses.error_code) AS issues
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team,
+               solar_teams.error_code) AS filtering
+GROUP BY error_code,
+         prio_team
+ORDER BY total_dmg_what_fixed DESC
+LIMIT 1;
+
+SELECT prio_team,
+       error_code,
+       SUM(issues) AS original_issues,
+       ((SUM(issues)) * 0.3) AS issues_what_fixed,
+       (SUM(issues) - ((SUM(issues)) * 0.3)) AS difference_in_issues,
+       SUM(original_dmg) AS original_dmg,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_fixed,
+       (SUM(original_dmg) -((SUM(original_dmg)) * 0.3)) AS difference_in_dmg
+FROM (SELECT prio_team,
+             solar_losses.error_code,
+             SUM(loss) AS original_dmg,
+             COUNT(solar_losses.error_code) AS issues
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team,
+               solar_losses.error_code) AS filtering
+GROUP BY error_code,
+         prio_team
+ORDER BY total_dmg_what_fixed DESC
+LIMIT 1;
+
+SELECT prio_team,
+       SUM(loss)* 0.3 AS issues_what_fixed
+FROM solar_losses
+  JOIN solar_teams
+  ON solar_teams.error_code = solar_losses.error_code
+GROUP BY prio_team
+ORDER BY issues_what_fixed DESC
+LIMIT 1;
+
+COMMIT;

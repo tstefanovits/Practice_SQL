@@ -435,12 +435,12 @@ SELECT prio_team,
        backup_team,
        error_code,
        SUM(issues) AS original_issues,
-       ((SUM(issues)) * 0.3) AS issues_what_fixed_the_main_team,
-       ((SUM(issues)) * 0.1) AS issues_what_fixed_the_backup_team,
+       ((SUM(issues)) * 0.3) AS issues_what_the_main_team_fixed,
+       ((SUM(issues)) * 0.1) AS issues_what_the_backup_team_fixed,
        (SUM(issues) - ((SUM(issues)) * 0.4)) AS difference_in_the_issues,
        SUM(original_dmg) AS original_dmg,
-       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team,
-       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_fixed_the_backup_team,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team_fixed,
+       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_the_backup_team_fixed,
        (SUM(original_dmg) -((SUM(original_dmg)) * 0.4)) AS difference_in_the_dmg
 FROM (SELECT prio_team,
              backup_team,
@@ -462,12 +462,12 @@ SELECT prio_team,
        backup_team,
        error_code,
        SUM(issues) AS original_issues,
-       ((SUM(issues)) * 0.3) AS issues_what_fixed_the_main_team,
-       ((SUM(issues)) * 0.1) AS issues_what_fixed_the_backup_team,
+       ((SUM(issues)) * 0.3) AS issues_what_the_main_team_fixed,
+       ((SUM(issues)) * 0.1) AS issues_what_the_backup_team_fixed,
        ((SUM(issues) - ((SUM(issues)) * 0.3) - (SUM(issues)) * 0.1)) AS difference_in_the_issues,
        SUM(original_dmg) AS original_dmg,
-       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team,
-       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_fixed_the_backup_team,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team_fixed,
+       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_the_backup_team_fixed,
        ((SUM(original_dmg) -((SUM(original_dmg)) * 0.3) - (SUM(original_dmg)) * 0.1)) AS difference_in_the_dmg
 FROM (SELECT prio_team,
              backup_team,
@@ -486,3 +486,32 @@ ORDER BY difference_in_the_dmg DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Alternative solutions for Task 8. */
+SELECT prio_team,
+       backup_team,
+       error_code,
+       SUM(issues) AS original_issues,
+       ((SUM(issues)) * 0.3) AS issues_what_the_main_team_fixed,
+       ((SUM(issues)) * 0.1) AS issues_what_the_backup_team_fixed,
+       ((SUM(issues) - ((SUM(issues)) * 0.3) - (SUM(issues)) * 0.1)) AS difference_in_the_issues,
+       SUM(original_dmg) AS original_dmg,
+       ((SUM(original_dmg)) * 0.3) AS total_dmg_what_the_main_team_fixed,
+       ((SUM(original_dmg)) * 0.1) AS total_dmg_what_the_backup_team_fixed,
+       ((SUM(original_dmg) -((SUM(original_dmg)) * 0.3) - (SUM(original_dmg)) * 0.1)) AS difference_in_the_dmg
+FROM (SELECT prio_team,
+             backup_team,
+             solar_losses.error_code,
+             SUM(loss) AS original_dmg,
+             COUNT(solar_losses.error_code) AS issues
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team,
+               backup_team,
+               solar_losses.error_code) AS filtering
+GROUP BY error_code,
+         prio_team,
+         backup_team
+ORDER BY difference_in_the_dmg DESC
+LIMIT 1;
+

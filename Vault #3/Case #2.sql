@@ -551,13 +551,14 @@ FROM (SELECT prio_team,
       FROM solar_losses
         JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
       GROUP BY prio_team
-      ORDER BY total_dmg_what_the_main_team_fixed DESC) AS ptr
+      ORDER BY total_dmg_what_the_main_team_fixed DESC) AS prio
   JOIN (SELECT backup_team,
                SUM(loss)*0.1 AS total_dmg_what_the_backup_team_fixed
         FROM solar_losses
           JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
         GROUP BY backup_team
-        ORDER BY total_dmg_what_the_backup_team_fixed DESC) AS btr ON ptr.prio_team = btr.backup_team
+        ORDER BY total_dmg_what_the_backup_team_fixed DESC) AS backup 
+        ON prio.prio_team = backup.backup_team
 ORDER BY difference_in_the_dmg DESC 
 LIMIT 1;
 

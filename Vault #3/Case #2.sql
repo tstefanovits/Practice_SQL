@@ -543,3 +543,22 @@ ORDER BY difference_in_the_dmg DESC
 LIMIT 1;
 
 COMMIT;
+
+SELECT prio_team,
+       total_dmg_what_the_main_team_fixed + total_dmg_what_the_backup_team_fixed AS difference_in_the_dmg
+FROM (SELECT prio_team,
+             SUM(loss)*0.3 AS total_dmg_what_the_main_team_fixed
+      FROM solar_losses
+        JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+      GROUP BY prio_team
+      ORDER BY total_dmg_what_the_main_team_fixed DESC) AS ptr
+  JOIN (SELECT backup_team,
+               SUM(loss)*0.1 AS total_dmg_what_the_backup_team_fixed
+        FROM solar_losses
+          JOIN solar_teams ON solar_teams.error_code = solar_losses.error_code
+        GROUP BY backup_team
+        ORDER BY total_dmg_what_the_backup_team_fixed DESC) AS btr ON ptr.prio_team = btr.backup_team
+ORDER BY difference_in_the_dmg DESC 
+LIMIT 1;
+
+COMMIT;

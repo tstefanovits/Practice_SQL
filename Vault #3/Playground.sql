@@ -37,3 +37,5 @@ FROM (SELECT abtest_companies.company_id,
   FULL JOIN abtest_companies ON abtest_users.user_id = abtest_companies.user_id
 GROUP BY segment
 ORDER BY abtest_users.segment;
+
+COMMIT;

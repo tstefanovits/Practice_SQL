@@ -8,3 +8,19 @@ GROUP BY source
 ORDER BY source DESC;
 
 COMMIT;
+
+/* Alternative solutions for Task 1. */
+SELECT source,
+       COUNT(*)
+FROM first_read
+GROUP BY source
+LIMIT 1;
+
+SELECT source,
+       COUNT(*)
+FROM first_read
+GROUP BY source
+ORDER BY source DESC 
+LIMIT 1;
+
+COMMIT;

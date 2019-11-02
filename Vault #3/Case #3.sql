@@ -36,3 +36,14 @@ ORDER BY source DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Alternative solutions for Task 2. */
+SELECT source,
+       COUNT(*)
+FROM first_read
+  JOIN buy ON first_read.user_id = buy.user_id
+GROUP BY source
+ORDER BY source DESC
+LIMIT 1;
+
+COMMIT;

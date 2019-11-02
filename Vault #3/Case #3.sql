@@ -80,3 +80,14 @@ GROUP my_day
 ORDER my_day DESC;
 
 COMMIT;
+
+/* Alternative solutions for Task 4. */
+SELECT my_day,
+       COUNT(*)
+FROM buy
+WHERE price = 8
+GROUP BY my_day
+HAVING COUNT(*) > 100
+ORDER BY my_day;
+
+COMMIT;

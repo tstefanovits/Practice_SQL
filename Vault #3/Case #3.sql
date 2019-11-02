@@ -102,3 +102,13 @@ FROM (SELECT my_day,
       ORDER BY my_day) AS filtering;
       
 COMMIT;
+
+/* Alternative solutions for Task 5. */
+SELECT COUNT(*)
+FROM (SELECT my_day,
+             SUM(price)
+      FROM buy
+      GROUP BY my_day
+      HAVING SUM(price) > 1000) AS filterin;
+
+COMMIT;

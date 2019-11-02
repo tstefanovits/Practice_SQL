@@ -47,3 +47,14 @@ ORDER BY source DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Task 3: From which source does Dilan get the highest revenue/user ratio from? */
+SELECT source,
+       SUM(buy.price) / COUNT(*) AS revenue
+FROM first_read
+  FULL JOIN buy ON first_read.user_id = buy.user_id
+GROUP BY source
+ORDER BY revenue DESC 
+LIMIT 1;
+
+COMMIT;

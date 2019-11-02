@@ -58,3 +58,15 @@ ORDER BY revenue DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Alternative solutions for Task 3. */
+SELECT source,
+       SUM(price) / COUNT(*)
+FROM first_read
+  FULL JOIN buy ON first_read.user_id = buy.user_id
+GROUP BY source
+ORDER BY revenue DESC 
+LIMIT 1;
+
+COMMIT;
+

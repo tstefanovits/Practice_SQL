@@ -24,3 +24,15 @@ ORDER BY source DESC
 LIMIT 1;
 
 COMMIT;
+
+/* Task 2: From which source does Dilan get the most purchases? */
+SELECT source,
+       COUNT(*)
+FROM first_read
+  JOIN buy ON first_read.user_id = buy.user_id
+WHERE buy.event = "buy"
+GROUP BY source
+ORDER BY source DESC
+LIMIT 1;
+
+COMMIT;

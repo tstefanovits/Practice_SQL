@@ -91,3 +91,14 @@ HAVING COUNT(*) > 100
 ORDER BY my_day;
 
 COMMIT;
+
+/* Task 5: How many $1000+ income days has Dilan had so far? */
+SELECT COUNT(*)
+FROM (SELECT my_day,
+             SUM(price)
+      FROM buy
+      GROUP BY my_day
+      HAVING SUM(price) > 1000
+      ORDER BY my_day) AS filtering;
+      
+COMMIT;

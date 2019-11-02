@@ -70,3 +70,13 @@ LIMIT 1;
 
 COMMIT;
 
+/* Task 4: List all days where Dilan had 100+ purchases for the $8 product! */
+SELECT my_day,
+       COUNT(*) AS darab
+FROM buy
+WHERE price = '8'
+AND   darab > 100 
+GROUP my_day 
+ORDER my_day DESC;
+
+COMMIT;
